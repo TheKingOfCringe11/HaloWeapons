@@ -73,6 +73,10 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="RUDE">
+      <HintPath>content\DLLs\RUDE.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
@@ -103,11 +107,14 @@
     <Compile Include="src\Bullets\CindershotBullet.cs" />
     <Compile Include="src\Bullets\HomingBullet.cs" />
     <Compile Include="src\Bullets\PulseBullet.cs" />
+    <Compile Include="src\NetMessages\NMSpikeGrenadeStick.cs" />
+    <Compile Include="src\Other\Compatibility\CorptronLogoInitializePatched.cs" />
     <Compile Include="src\Other\DuckResetNonServerDeathStatePatched.cs" />
     <Compile Include="src\NetMessages\NMEnergyBeam.cs" />
     <Compile Include="src\NetMessages\NMHeatWaveFire.cs" />
-    <Compile Include="src\NetMessages\NMSpikeGrenadeStick.cs" />
     <Compile Include="src\NetMessages\NMThrusterStartBoosting.cs" />
+    <Compile Include="src\Other\Compatibility\ModInteractions.cs" />
+    <Compile Include="src\Other\GunGameLevelAttribute.cs" />
     <Compile Include="src\Particles\DropWallParticle.cs" />
     <Compile Include="src\Particles\FadingParticle.cs" />
     <Compile Include="src\Particles\GlassParticle.cs" />
@@ -142,7 +149,6 @@
     <Compile Include="src\NetMessages\NMSetNeedlerTarget.cs" />
     <Compile Include="src\NetMessages\NMSetSkin.cs" />
     <Compile Include="src\Other\AssemblyResolver.cs" />
-    <Compile Include="src\Other\DuckGiveHoldablePatched.cs" />
     <Compile Include="src\Other\EditorGroups.cs" />
     <Compile Include="src\Other\Extensions.cs" />
     <Compile Include="src\Guns\HaloWeapon.cs" />
