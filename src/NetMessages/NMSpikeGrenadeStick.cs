@@ -3,12 +3,12 @@
     public class NMSpikeGrenadeStick : NMEvent
     {
         public SpikeGrenade Grenade;
-        public MaterialThing StickThing;
+        public MaterialThing StickTo;
 
-        public NMSpikeGrenadeStick(SpikeGrenade grenade, MaterialThing stickThing)
+        public NMSpikeGrenadeStick(SpikeGrenade grenade, MaterialThing stickTo)
         {
             Grenade = grenade;
-            StickThing = stickThing;
+            StickTo = stickTo;
         }
 
         public NMSpikeGrenadeStick()
@@ -18,8 +18,7 @@
 
         public override void Activate()
         {
-            Thing.SuperFondle(Grenade, DuckNetwork.localConnection);
-            Grenade.Stick(StickThing);
+            Grenade.Stick(StickTo);
         }
     }
 }

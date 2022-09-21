@@ -4,6 +4,7 @@ using System.Linq;
 namespace DuckGame.HaloWeapons
 {
     [EditorGroup(EditorGroups.Guns)]
+    [GunGameLevel(3)]
     public class HeatWave : HaloWeapon
     {
         private readonly Sprite _upperSight;
@@ -43,9 +44,6 @@ namespace DuckGame.HaloWeapons
         {
             base.Update();
 
-            _ammoType.bulletSpeed = Mode.Speed;
-            _kickForce = Mode.KickForce;
-
             bool turnedRight = offDir > 0;
             float halfPI = Maths.PI / 2f;
 
@@ -70,7 +68,6 @@ namespace DuckGame.HaloWeapons
                 return;
 
             Fire();
-            DuckNetwork.SendToEveryone(new NMHeatWaveFire(this));
 
             _wait = _fireWait;
         }
@@ -79,48 +76,24 @@ namespace DuckGame.HaloWeapons
         {
             if (ammo > 0)
             {
+                FireBullets(position, angle, offDir);
+                Send.Message(new NMHeatWaveFire(this, position, angle, offDir, _bulletModeIndex));
+
+                _kickForce = Mode.KickForce;
                 ApplyKick();
 
-                float initialOffset = -_barrelWidth / 2f;
+                ammo--;
 
-                float angleRange = Mode.AngleRange;
-                float initialAngle = -angleRange / 2f;
-
-                for (int i = 0; i < _bulletsPerFire; i++)
+                if (owner is null)
                 {
-                    Vec2 offset = barrelOffset + new Vec2(0f, initialOffset + _barrelWidth / _bulletsPerFire * i);
-                    float barrelAngle = angle;
-                    float bulletAngle = initialAngle + angleRange / _bulletsPerFire * i;
-
-                    if (offDir < 0)
-                    {
-                        barrelAngle -= Maths.PI;
-                        bulletAngle *= -1f;
-                    }
-
-                    _ammoType.rebound = i == 0 || i == _bulletsPerFire - 1 ? false : Mode.Rebound;
-
-                    float shootAngle = Maths.RadToDeg(barrelAngle + bulletAngle);
-                    _ammoType.FireBullet(Offset(offset), owner, shootAngle, this);
-                }
-
-                PlayFireSound();
-
-                if (isServerForObject)
-                {
-                    ammo--;
-
-                    if (owner is null)
-                    {
-                        Vec2 fly = barrelVector * Rando.Float(1f, 3f);
-                        fly.y += Rando.Float(2f);
-                        velocity += fly;
-                    }
+                    Vec2 fly = barrelVector * Rando.Float(1f, 3f);
+                    fly.y += Rando.Float(2f);
+                    velocity += fly;
                 }
             }
             else
             {
-                DoAmmoClick();
+                SFX.PlaySynchronized(_clickSound);
             }
         }
 
@@ -136,6 +109,13 @@ namespace DuckGame.HaloWeapons
 
             Graphics.Draw(_upperSight, upperSightPosition.x, upperSightPosition.y, 3f);
             Graphics.Draw(_lowerSight, lowerSightPosition.x, lowerSightPosition.y, 3f);
+        }
+
+        public void OnFireMessage(Vec2 position, float barrelAngle, sbyte direction, sbyte bulletModeIndex)
+        {
+            _bulletModeIndex = bulletModeIndex;
+
+            FireBullets(position, barrelAngle, direction);
         }
 
         protected override void OnQuack()
@@ -157,6 +137,35 @@ namespace DuckGame.HaloWeapons
             sprite.SetAnimation("idle");
 
             return sprite;
+        }
+
+        private void FireBullets(Vec2 position, float angle, sbyte direction)
+        {
+            _ammoType.bulletSpeed = Mode.Speed;
+
+            float initialOffset = -_barrelWidth / 2f;
+
+            float angleRange = Mode.AngleRange;
+            float initialAngle = -angleRange / 2f;
+
+            for (int i = 0; i < _bulletsPerFire; i++)
+            {
+                Vec2 offset = barrelOffset + new Vec2(0f, initialOffset + _barrelWidth / _bulletsPerFire * i);
+                float barrelAngle = angle;
+                float bulletAngle = initialAngle + angleRange / _bulletsPerFire * i;
+
+                if (direction < 0)
+                {
+                    barrelAngle -= Maths.PI;
+                    bulletAngle *= -1f;
+                }
+
+                float shootAngle = Maths.RadToDeg(barrelAngle + bulletAngle);
+                _ammoType.rebound = i == 0 || i == _bulletsPerFire - 1 ? false : Mode.Rebound;
+                _ammoType.FireBullet(position + offset.Rotate(angle, Vec2.Zero), owner, shootAngle, this);
+            }
+
+            PlayFireSound();
         }
 
         private sealed class BulletMode
@@ -184,3 +193,4 @@ namespace DuckGame.HaloWeapons
         }
     }
 }
+

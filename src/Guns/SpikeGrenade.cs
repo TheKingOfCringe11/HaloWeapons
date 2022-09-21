@@ -6,11 +6,13 @@ namespace DuckGame.HaloWeapons
     [EditorGroup(EditorGroups.Guns)]
     public class SpikeGrenade : HaloGrenade
     {
+        [Binding] private bool _stuck;
+        [Binding] private Vec2 _stickPosition;
+
         private StickThing _stickThing;
         private sbyte _stickThingInitialDirection;
         private float _stickThingInitialAngle;
 
-        private Vec2 _stickPosition;
         private float _stickAngle;
 
         public SpikeGrenade(float x, float y) : base(x, y)
@@ -23,7 +25,7 @@ namespace DuckGame.HaloWeapons
             _bouncy = 0f;
         }
 
-        private bool CanStick => HasBeenPickedUp && hoverSpawner is null;
+        private bool CanStick => Activated && hoverSpawner is null;
 
         public override void Update()
         {
@@ -33,36 +35,13 @@ namespace DuckGame.HaloWeapons
             {
                 if (_stickThing is not null)
                 {
-                    _stickThing.Update();
-
-                    Vec2 stickThingPosition = _stickThing.Position;
-
-                    float xOffset = _stickPosition.x;
-                    float directionOffset = -(_stickThing.Angle - _stickThingInitialAngle);
-
-                    if (_stickThing.Direction != _stickThingInitialDirection)
-                    {
-                        xOffset = -xOffset;
-                        directionOffset = -directionOffset;
-
-                        angle = -_stickAngle;
-                    }
-                    else
-                    {
-                        angle = _stickAngle;
-                    }
-
-                    angle += directionOffset;
-
-                    Vec2 rawPosition = stickThingPosition - new Vec2(xOffset, _stickPosition.y);
-
-                    position = rawPosition.Rotate(directionOffset, stickThingPosition);
-                    depth = _stickThing.Depth + 0.1f;
+                    UpdatePosition();
 
                     if (_stickThing.Removed)
                     {
                         updatePhysics = true;
                         canPickUp = true;
+                        _stuck = false;
 
                         _stickThing = null;
                     }
@@ -103,10 +82,20 @@ namespace DuckGame.HaloWeapons
                 clip.Add(thing);
         }
 
+        public override void Draw()
+        {
+            if (_stuck && _stickThing is not null && !isServerForObject)
+                UpdatePosition();
+
+            base.Draw();
+        }
+
         public void Stick(MaterialThing stickTo)
         {
-            if (!Activated)
-                Activate();
+            if (stickTo is null)
+                return;
+
+            sleeping = true;
 
             updatePhysics = false;
             canPickUp = false;
@@ -119,7 +108,12 @@ namespace DuckGame.HaloWeapons
             Vec2 thingPosition = _stickThing.Position;
 
             _stickAngle = Maths.PointDirectionRad(position, thingPosition);
-            _stickPosition = thingPosition - position;
+
+            if (isServerForObject)
+            {
+                _stickPosition = thingPosition - position;
+                _stuck = true;
+            }
         }
 
         protected override void Activate()
@@ -173,16 +167,40 @@ namespace DuckGame.HaloWeapons
 
         private void OnCollide(MaterialThing with)
         {
-            if (!isServerForObject || _stickThing is not null || !CanStick)
+            if (!isServerForObject || _stuck || !CanStick)
                 return;
-
-            if (!with.isServerForObject)
-            {
-                Send.Message(new NMSpikeGrenadeStick(this, with));
-                return;
-            }
 
             Stick(with);
+            Send.Message(new NMSpikeGrenadeStick(this, with));
+        }
+
+        private void UpdatePosition()
+        {
+            _stickThing.Update();
+
+            Vec2 stickThingPosition = _stickThing.Position;
+
+            float xOffset = _stickPosition.x;
+            float directionOffset = -(_stickThing.Angle - _stickThingInitialAngle);
+
+            if (_stickThing.Direction != _stickThingInitialDirection)
+            {
+                xOffset = -xOffset;
+                directionOffset = -directionOffset;
+
+                angle = -_stickAngle;
+            }
+            else
+            {
+                angle = _stickAngle;
+            }
+
+            angle += directionOffset;
+
+            Vec2 rawPosition = stickThingPosition - new Vec2(xOffset, _stickPosition.y);
+
+            position = rawPosition.Rotate(directionOffset, stickThingPosition);
+            depth = _stickThing.Depth + 0.1f;
         }
 
         private class StickThing
