@@ -7,6 +7,7 @@ namespace DuckGame.HaloWeapons
     {
         private Vec2 _travelEnd;
         private IEnumerable<MaterialThing> _currentlyImpacting;
+        private HashSet<MaterialThing> _ignore = new HashSet<MaterialThing>();
 
         public Beam(float x, float y) : base(x, y)
         {
@@ -42,6 +43,9 @@ namespace DuckGame.HaloWeapons
             {
                 foreach (MaterialThing thing in _currentlyImpacting)
                 {
+                    if (_ignore.Contains(thing))
+                        continue;
+
                     SuperFondle(thing, DuckNetwork.localConnection);
                     thing.Destroy(new DTIncinerate(this));
                 }
@@ -61,6 +65,11 @@ namespace DuckGame.HaloWeapons
             base.Added(parent);
 
             Update();
+        }
+
+        public void AddIgnoredThing(MaterialThing thing)
+        {
+            _ignore.Add(thing);
         }
     }
 }

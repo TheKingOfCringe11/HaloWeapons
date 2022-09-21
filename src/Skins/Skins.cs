@@ -219,7 +219,7 @@ namespace DuckGame.HaloWeapons
 
         private static void LoadWeaponsInfo()
         {
-            string path = Mod.GetPath<HaloWeapons>("skins.json");
+            string path = Paths.Get("skins.json");
 
             if (!File.Exists(path))
                 return;

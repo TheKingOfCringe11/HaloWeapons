@@ -10,7 +10,7 @@
             graphic = Resources.LoadSprite("dropWall.png");
             weight = 4f;
 
-            Utilities.SetCollisionBox(this, new Vec2(10f, 6f));
+            Utilities.SetCollisionBox(this, 10f, 6f);
         }
 
         public override void Update()
