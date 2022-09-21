@@ -2,11 +2,9 @@
 
 namespace DuckGame.HaloWeapons
 {
-    [HarmonyPatch(typeof(Duck), nameof(Duck.Kill))]
     internal static class DuckKillPatched
     {
-        [HarmonyPostfix]
-        private static void Kill(Duck __instance)
+        public static void Kill(Duck __instance)
         {
             if (Level.current is TeamSelect2)
                 return;
