@@ -7,8 +7,7 @@
 
         public ATCindershot()
         {
-            sprite = Resources.LoadSprite("cindershotBullet.png");
-            sprite.CenterOrigin();
+            sprite = Resources.LoadSprite("cindershotBullet.png", true);
 
             affectedByGravity = true;
             bulletThickness = 3f;
@@ -18,6 +17,7 @@
             bulletColor = new Color(241, 92, 211); 
             bulletType = typeof(CindershotBullet);
             combustable = true;
+            flawlessPipeTravel = true;
         }
 
         public override void OnHit(bool destroyed, Bullet bullet)

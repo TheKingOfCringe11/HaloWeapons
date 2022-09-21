@@ -9,8 +9,7 @@
             bulletSpeed = 8f;
             speedVariation = 0f;
             penetration = 1f;
-            sprite = new Sprite(Paths.GetSpritePath("needlerBullet"));
-            sprite.CenterOrigin();
+            sprite = Resources.LoadSprite("needlerBullet", true);
             bulletThickness = 1f;
             affectedByGravity = true;
             gravityMultiplier = 0f;
@@ -19,6 +18,7 @@
             bulletType = typeof(HomingBullet);
             bulletColor = new Color(248, 186, 251);
             combustable = true;
+            flawlessPipeTravel = true;
         }
     }
 }

@@ -11,6 +11,7 @@ namespace DuckGame.HaloWeapons
             range = 700f;
             bulletSpeed = 8f;
             penetration = 0.2f;
+            flawlessPipeTravel = true;
         }
 
         public override void OnHit(bool destroyed, Bullet bullet)

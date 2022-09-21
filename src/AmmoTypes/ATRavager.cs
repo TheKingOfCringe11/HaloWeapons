@@ -13,6 +13,7 @@
             penetration = 1f;
             speedVariation = 0.5f;
             combustable = true;
+            flawlessPipeTravel = true;
         }
 
         protected void SetSprite(SpriteMap spriteMap)
