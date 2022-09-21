@@ -1,6 +1,7 @@
 ﻿namespace DuckGame.HaloWeapons
 {
     [EditorGroup(EditorGroups.Guns)]
+    [GunGameLevel(12)]
     public class Cindershot : HaloWeapon
     {
         public Cindershot(float x, float y) : base(x, y)

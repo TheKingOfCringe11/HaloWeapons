@@ -1,6 +1,7 @@
 ﻿namespace DuckGame.HaloWeapons
 {
     [EditorGroup(EditorGroups.Guns)]
+    [GunGameLevel(4)]
     public class SentinelBeam : HaloWeapon
     {
         private readonly Sound _beamSound = Resources.LoadSound("sentinelBeamFire.wav", looped: true);
@@ -39,7 +40,7 @@
             _beam.angle = barrelAngle;
             _beam.offDir = offDir;
 
-            if (_charge <= 0 || !_triggerHeld)
+            if (_charge <= 0 || !_triggerHeld || owner is null)
             {
                 RemoveBeam();
                 return;
@@ -78,6 +79,11 @@
         {
             base.Thrown();
 
+            RemoveBeam();
+        }
+
+        public override void Terminate()
+        {
             RemoveBeam();
         }
 

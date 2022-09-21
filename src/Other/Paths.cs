@@ -31,6 +31,11 @@ namespace DuckGame.HaloWeapons
             return DllsDirectory + CheckExtension(fileName, "dll");
         }
 
+        public static string Get(string fileName)
+        {
+            return Mod.GetPath<HaloWeapons>(fileName);
+        }
+
         private static string CheckExtension(string fileName, string extension)
         {
             extension = extension.Insert(0, ".");

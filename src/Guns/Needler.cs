@@ -4,6 +4,7 @@ using System.Linq;
 namespace DuckGame.HaloWeapons
 {
     [EditorGroup(EditorGroups.Guns)]
+    [GunGameLevel(14)]
     public class Needler : HaloWeapon, IHomingWeapon
     {
         private readonly SpriteMap _sight = Resources.LoadSpriteMap("needlerSight.png", 31, 31);

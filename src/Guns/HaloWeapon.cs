@@ -21,41 +21,12 @@
             base.Update();
 
             if (duck is not null && duck.inputProfile.Pressed("QUACK"))
-                OnQuack(); 
-        }
+                OnQuack();
 
-        public void OnPickUp()
-        {
-            if (HasBeenPickedUp || !isServerForObject)
-                return;
-
-            HasBeenPickedUp = true;
-
-            if (Skins.TryGetEquippedIndex(GetType(), out int index))
+            if (isServerForObject && !HasBeenPickedUp && owner is Duck)
             {
-                string animation = string.Empty;
-                int frame = 0;
-
-                if (SpriteMap is not null)
-                {
-                    string currentAnimation = SpriteMap.currentAnimation;
-
-                    if (currentAnimation is not null)
-                        animation = string.Copy(currentAnimation);
-
-                    frame = SpriteMap.frame;
-                }
-
-                SetGraphics(index);
-
-                if (Options.Data.ShareSkins)
-                    DuckNetwork.SendToEveryone(new NMSetSkin(this, index));
-
-                if (SpriteMap is not null)
-                {
-                    SpriteMap.SetAnimation(animation);
-                    SpriteMap.frame = frame;
-                }
+                HasBeenPickedUp = true;
+                OnPickUp();
             }
         }
 
@@ -82,9 +53,7 @@
 
         protected void SetCollisionBox(float width, float height)
         {
-            collisionSize = new Vec2(width, height);
-            center = collisionSize / 2f;
-            collisionOffset = -center;
+            Utilities.SetCollisionBox(this, width, height);
         }
 
         protected void SetSpriteCollisionBox()
@@ -100,6 +69,36 @@
             Fire();
             Send.Message(new NMFireGun(this, firedBullets, bulletFireIndex, false, duck is null ? (byte)4 : duck.netProfileIndex, true), NetMessagePriority.Urgent);
             firedBullets.Clear();
+        }
+
+        private void OnPickUp()
+        {
+            if (Skins.TryGetEquippedIndex(GetType(), out int index))
+            {
+                string animation = string.Empty;
+                int frame = 0;
+
+                if (SpriteMap is not null)
+                {
+                    string currentAnimation = SpriteMap.currentAnimation;
+
+                    if (currentAnimation is not null)
+                        animation = string.Copy(currentAnimation);
+
+                    frame = SpriteMap.frame;
+                }
+
+                SetGraphics(index);
+
+                if (Options.Data.ShareSkins)
+                    DuckNetwork.SendToEveryone(new NMSetSkin(this, index));
+
+                if (SpriteMap is not null)
+                {
+                    SpriteMap.SetAnimation(animation);
+                    SpriteMap.frame = frame;
+                }
+            }
         }
     }
 }

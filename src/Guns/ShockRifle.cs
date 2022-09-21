@@ -3,6 +3,7 @@
 namespace DuckGame.HaloWeapons
 {
     [EditorGroup(EditorGroups.Guns)]
+    [GunGameLevel(6)]
     public class ShockRifle : HaloWeapon
     {
         [Binding] private float _cooldown = 0f;
@@ -54,11 +55,21 @@ namespace DuckGame.HaloWeapons
             {
                 Vec2 barrelPosition = Offset(barrelOffset + new Vec2(2f, 0f));
 
-                Level.Add(new EnergyBeam(barrelPosition.x, barrelPosition.y)
+                var beam = new EnergyBeam(barrelPosition.x, barrelPosition.y)
                 {
                     angle = barrelAngle,
                     responsibleProfile = responsibleProfile
-                });
+                };
+
+                if (owner is Duck duck)
+                {
+                    beam.AddIgnoredThing(duck);
+
+                    foreach (Equipment equipment in duck._equipment)
+                        beam.AddIgnoredThing(equipment);
+                }
+
+                Level.Add(beam);
 
                 DuckNetwork.SendToEveryone(new NMEnergyBeam(barrelPosition, barrelAngle));
 

@@ -3,6 +3,7 @@
 namespace DuckGame.HaloWeapons
 {
     [EditorGroup(EditorGroups.Guns)]
+    [GunGameLevel(7)]
     public class Mangler : HaloWeapon
     {
         private readonly Vec2 _spikeOffset = new Vec2(7f, 5f);

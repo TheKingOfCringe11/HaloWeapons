@@ -4,6 +4,7 @@ namespace DuckGame.HaloWeapons
 {
     [NoSkins]
     [EditorGroup(EditorGroups.Guns)]
+    [GunGameLevel(10)]
     public class EnergySword : HaloWeapon
     {
         private readonly Vec2 _maxVelocityGained = new Vec2(9f, -1.75f);

@@ -4,6 +4,7 @@ using System;
 namespace DuckGame.HaloWeapons
 {
     [EditorGroup(EditorGroups.Guns)]
+    [GunGameLevel(8)]
     public class Ravager : BurstingWeapon
     {
         private readonly Sprite _chargeFlash = Resources.LoadSprite("ravagerCharge.png");

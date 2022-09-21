@@ -33,9 +33,14 @@ namespace DuckGame.HaloWeapons
             }
         }
 
-        public static Sprite LoadSprite(string fileName)
+        public static Sprite LoadSprite(string fileName, bool centerOrigin = false)
         {
-            return new Sprite(Paths.GetSpritePath(fileName));
+            var sprite = new Sprite(Paths.GetSpritePath(fileName));
+
+            if (centerOrigin)
+                sprite.CenterOrigin();
+
+            return sprite;
         }
 
         public static SpriteMap LoadSpriteMap(string fileName, int frameWidth, int frameHeight)

@@ -1,6 +1,7 @@
 ﻿namespace DuckGame.HaloWeapons
 {
     [EditorGroup(EditorGroups.Guns)]
+    [GunGameLevel(11)]
     public class BR75 : BurstingWeapon
     {
         public BR75(float x, float y) : base(x, y)

@@ -1,6 +1,7 @@
 ﻿namespace DuckGame.HaloWeapons
 {
     [EditorGroup(EditorGroups.Guns)]
+    [GunGameLevel(5)]
     public class PulseCarbine : BurstingWeapon
     {
         public PulseCarbine(float x, float y) : base(x, y)

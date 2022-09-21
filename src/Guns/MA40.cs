@@ -1,6 +1,7 @@
 ﻿namespace DuckGame.HaloWeapons
 {
     [EditorGroup(EditorGroups.Guns)]
+    [GunGameLevel(1)]
     public class MA40 : HaloWeapon
     {
         public MA40(float x, float y) : base(x, y)
