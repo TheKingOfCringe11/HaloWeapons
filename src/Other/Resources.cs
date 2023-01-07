@@ -14,7 +14,13 @@ namespace DuckGame.HaloWeapons
 
         public static void LoadShaders()
         {
-            foreach (string path in Directory.GetFiles(Paths.ShadersDirectory))
+            string shadersDirectory = Paths.ShadersDirectory;
+
+#if DEBUG
+            var context = new CpC();
+            var processor = new EffectProcessor();
+
+            foreach (string path in Directory.GetFiles(Paths.ShadersSourceDirectory))
             {
                 if (Path.GetExtension(path) == ".fx")
                 {
@@ -23,14 +29,29 @@ namespace DuckGame.HaloWeapons
                         EffectCode = File.ReadAllText(path),
                     };
 
-                    var context = new CpC();
-                    var processor = new EffectProcessor();
-
                     CompiledEffectContent effectContent = processor.Process(content, context);
 
-                    s_shadersCode.Add(path, effectContent.GetEffectCode());
+                    byte[] code = effectContent.GetEffectCode();
+                    string fileName = Path.GetFileName(path);
+                    string compiledFileName = Path.ChangeExtension(fileName, ".xnb");
+                    string compiledPath = Path.Combine(shadersDirectory, compiledFileName);
+
+                    File.WriteAllBytes(compiledPath, code);
+
+                    s_shadersCode.Add(compiledPath, code);
                 }
             }
+#else
+            foreach (string path in Directory.GetFiles(shadersDirectory))
+            {
+                if (Path.GetExtension(path) == ".xnb")
+                {
+                    byte[] code = File.ReadAllBytes(path);
+
+                    s_shadersCode.Add(path, code);
+                }
+            }
+#endif
         }
 
         public static Sprite LoadSprite(string fileName, bool centerOrigin = false)
@@ -76,7 +97,9 @@ namespace DuckGame.HaloWeapons
             if (!s_shadersCode.TryGetValue(path, out byte[] shaderCode))
                 return null;
 
-            return new MTEffect(new Effect(Graphics.device, shaderCode), Path.GetFileNameWithoutExtension(fileName));
+            var effect = new Effect(Graphics.device, shaderCode);
+
+            return new MTEffect(effect, Path.GetFileNameWithoutExtension(fileName));
         }
     }
 }

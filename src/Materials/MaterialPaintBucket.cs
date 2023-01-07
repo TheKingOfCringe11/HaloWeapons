@@ -34,7 +34,7 @@
 
         private void LoadEffect()
         {
-            _effect = Resources.LoadMTEffect("paintBucket.fx");
+            _effect = Resources.LoadMTEffect("paintBucket.xnb");
         }
     }
 }

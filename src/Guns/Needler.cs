@@ -4,6 +4,7 @@ using System.Linq;
 namespace DuckGame.HaloWeapons
 {
     [EditorGroup(EditorGroups.Guns)]
+    [BaggedProperty("previewPriority", true)]
     [GunGameLevel(14)]
     public class Needler : HaloWeapon, IHomingWeapon
     {

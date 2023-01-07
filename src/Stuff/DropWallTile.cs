@@ -174,6 +174,6 @@ namespace DuckGame.HaloWeapons
             return Rando.Float(-2f);
         }
 
-        private record struct BulletHit(Vec2 Enter, Vec2 Exit);
+        private readonly record struct BulletHit(Vec2 Enter, Vec2 Exit);
     }
 }

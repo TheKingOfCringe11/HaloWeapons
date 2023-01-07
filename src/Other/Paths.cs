@@ -7,6 +7,7 @@ namespace DuckGame.HaloWeapons
         public static string SpritesDirectory => ContentDirectory + "Sprites/";
         public static string SoundsDirectory => ContentDirectory + "SFX/";
         public static string ShadersDirectory => ContentDirectory + "Shaders/";
+        public static string ShadersSourceDirectory => ShadersDirectory + "Source";
         public static string DllsDirectory => ContentDirectory + "DLLs/";
 
         private static string ContentDirectory => $"{ModLoader.GetMod<HaloWeapons>().configuration.contentDirectory}/";
@@ -23,7 +24,7 @@ namespace DuckGame.HaloWeapons
 
         public static string GetShaderPath(string fileName)
         {
-            return ShadersDirectory + CheckExtension(fileName, "fx");
+            return ShadersDirectory + CheckExtension(fileName, "xnb");
         }
 
         public static string GetDllPath(string fileName)

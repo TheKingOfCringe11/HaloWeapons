@@ -3,6 +3,7 @@
 namespace DuckGame.HaloWeapons
 {
     [EditorGroup(EditorGroups.Equipment)]
+    [BaggedProperty("previewPriority", true)]
     public class Thruster : Equipment
     {
         private readonly SpriteMap _base = Resources.LoadSpriteMap("thrusterBase.png", 5, 7);
@@ -208,6 +209,6 @@ namespace DuckGame.HaloWeapons
             return true;
         }
 
-        private record struct BoostTracePart(int Frame, string Animation, Vec2 Position, sbyte Direction);
+        private readonly record struct BoostTracePart(int Frame, string Animation, Vec2 Position, sbyte Direction);
     }
 }

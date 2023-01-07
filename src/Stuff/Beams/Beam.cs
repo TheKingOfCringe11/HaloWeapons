@@ -5,9 +5,10 @@ namespace DuckGame.HaloWeapons
 {
     public abstract class Beam : Thing
     {
-        private Vec2 _travelEnd;
+        private readonly HashSet<MaterialThing> _ignore = new HashSet<MaterialThing>();
+
         private IEnumerable<MaterialThing> _currentlyImpacting;
-        private HashSet<MaterialThing> _ignore = new HashSet<MaterialThing>();
+        private Vec2 _travelEnd;
 
         public Beam(float x, float y) : base(x, y)
         {

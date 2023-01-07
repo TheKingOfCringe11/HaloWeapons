@@ -1,8 +1,7 @@
-﻿using System;
-
-namespace DuckGame.HaloWeapons
+﻿namespace DuckGame.HaloWeapons
 {
     [EditorGroup(EditorGroups.Props)]
+    [BaggedProperty("previewPriority", true)]
     public class ActiveCamo : Holdable
     {
         private readonly SpriteMap _sprite = Resources.LoadSpriteMap("activeCamo", 8, 8);

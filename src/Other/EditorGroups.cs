@@ -10,6 +10,6 @@
         public const string JumpThroung = $"{Blocks}|JumpThrough";
         public const string Parallax = $"{Background}|Parallax";
 
-        private const string Section = "Halo Infinite|";
+        private const string Section = "Halo Weapons|";
     }
 }

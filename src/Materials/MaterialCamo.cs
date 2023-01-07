@@ -9,7 +9,7 @@
 
         public MaterialCamo(Sprite sprite, float deltaTime)
         {
-            _effect = Resources.LoadMTEffect("camo.fx");
+            _effect = Resources.LoadMTEffect("camo.xnb");
             _sprite = sprite;
             _deltaTime = deltaTime;
         }

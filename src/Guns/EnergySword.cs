@@ -4,6 +4,7 @@ namespace DuckGame.HaloWeapons
 {
     [NoSkins]
     [EditorGroup(EditorGroups.Guns)]
+    [BaggedProperty("previewPriority", true)]
     [GunGameLevel(10)]
     public class EnergySword : HaloWeapon
     {
